@@ -170,7 +170,6 @@ directive:
     debug: true
     where: $.definitions
     transform: >
-      $lib.log($);
       $.Identity['x-ms-client-name'] = 'ArmApplicationManagedIdentity';
       $.Identity.properties.type['x-ms-enum']['name'] = 'ArmApplicationManagedIdentityType';
       $.Identity.properties.principalId['format'] = 'uuid';
@@ -181,6 +180,7 @@ directive:
       $.Plan['x-ms-client-name'] = 'ArmApplicationPlan';
       $.Sku['x-ms-client-name'] = 'ArmApplicationSku';
       $.Operation['x-ms-client-name'] = 'ArmApplicationOperation';
+      $.Operation.properties['display'] = undefined;
       $.JitRequestDefinition['x-ms-client-name'] = 'JitRequest';
       $.JitRequestDefinitionListResult['x-ms-client-name'] = 'JitRequestListResult';
       $.Application['x-ms-client-name'] = 'ArmApplication';
@@ -230,7 +230,6 @@ directive:
     where: $.definitions
     debug: true
     transform: >
-      $lib.log($);
       $.DeploymentProperties.properties.mode['x-ms-enum'].name = 'ArmDeploymentMode';
       $.DeploymentPropertiesExtended.properties.mode['x-ms-enum'].name = 'ArmDeploymentMode';
       $.DeploymentExtended['x-ms-client-name'] = 'ArmDeployment';
@@ -272,6 +271,7 @@ directive:
       $.Identity['x-ms-client-name'] = 'ArmResourceIdentity';
       $.Sku['x-ms-client-name'] = 'ArmResourceSku';
       $.Operation['x-ms-client-name'] = 'ArmResourceOperation';
+      $.Operation.properties['display']['x-ms-client-name'] = 'ArmResourceOperationDisplay';
       $.OperationListResult['x-ms-client-name'] = 'ArmOperationListResult';
   - from: resources.json
     where: $.paths['/providers/Microsoft.Resources/deployments/{deploymentName}/whatIf'].post.parameters[1].schema
