@@ -7,7 +7,7 @@ azure-arm: true
 library-name: Resources
 namespace: Azure.ResourceManager.Resources
 title: ResourceManagementClient
-tag: package-resources-2022-04
+tag: package-resources-2022-12
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 skip-csproj: true
@@ -167,8 +167,10 @@ directive:
       $.StorageAccountConfiguration['x-ms-client-name'] = 'ScriptStorageConfiguration';
 
   - from: managedapplications.json
+    debug: true
     where: $.definitions
     transform: >
+      $lib.log($);
       $.Identity['x-ms-client-name'] = 'ArmApplicationManagedIdentity';
       $.Identity.properties.type['x-ms-enum']['name'] = 'ArmApplicationManagedIdentityType';
       $.Identity.properties.principalId['format'] = 'uuid';
@@ -178,19 +180,12 @@ directive:
       $.Resource['x-ms-client-name'] = 'ArmApplicationResourceBase';
       $.Plan['x-ms-client-name'] = 'ArmApplicationPlan';
       $.Sku['x-ms-client-name'] = 'ArmApplicationSku';
-      $.ErrorResponse['x-ms-client-name'] = 'ArmApplicationErrorResponse';
-      $.OperationListResult['x-ms-client-name'] = 'ArmApplicationOperationListResult';
       $.Operation['x-ms-client-name'] = 'ArmApplicationOperation';
-      $.Operation.properties.displayOfApplication = $.Operation.properties.display;
-      $.Operation.properties['display'] = undefined;
       $.JitRequestDefinition['x-ms-client-name'] = 'JitRequest';
       $.JitRequestDefinitionListResult['x-ms-client-name'] = 'JitRequestListResult';
       $.Application['x-ms-client-name'] = 'ArmApplication';
-      $.ApplicationPackageLockingPolicyDefinition['x-ms-client-name'] = 'ApplicationPackageLockingPolicy';
-      $.ApplicationBillingDetailsDefinition['x-ms-client-name'] = 'ApplicationBillingDetails';
       $.JitApproverDefinition['x-ms-client-name'] = 'JitApprover';
       $.DeploymentMode['x-ms-enum']['name'] = 'ArmApplicationDeploymentMode';
-      $.Application['x-ms-client-name'] = 'ArmApplication';
       $.ApplicationDefinition['x-ms-client-name'] = 'ArmApplicationDefinition';
       $.ApplicationPackageLockingPolicyDefinition['x-ms-client-name'] = 'ArmApplicationPackageLockingPolicy';
       $.ApplicationBillingDetailsDefinition['x-ms-client-name'] = 'ArmApplicationBillingDetails';
@@ -233,7 +228,9 @@ directive:
       $.ApplicationPropertiesPatchable.properties.managedResourceGroupId['x-ms-format'] = 'arm-id';
   - from: resources.json
     where: $.definitions
+    debug: true
     transform: >
+      $lib.log($);
       $.DeploymentProperties.properties.mode['x-ms-enum'].name = 'ArmDeploymentMode';
       $.DeploymentPropertiesExtended.properties.mode['x-ms-enum'].name = 'ArmDeploymentMode';
       $.DeploymentExtended['x-ms-client-name'] = 'ArmDeployment';
@@ -269,6 +266,13 @@ directive:
       $.TemplateLink['x-ms-client-name'] = 'ArmDeploymentTemplateLink';
       $.WhatIfChange.properties.changeType['x-ms-enum'].name = 'WhatIfChangeType';
       $.WhatIfPropertyChange.properties.propertyChangeType['x-ms-enum'].name = 'WhatIfPropertyChangeType';
+      $.Resource['x-ms-client-name'] = 'ArmResource';
+      $.GenericResource['x-ms-client-name'] = 'ArmGenericResource';
+      $.Plan['x-ms-client-name'] = 'ArmResourcePlan';
+      $.Identity['x-ms-client-name'] = 'ArmResourceIdentity';
+      $.Sku['x-ms-client-name'] = 'ArmResourceSku';
+      $.Operation['x-ms-client-name'] = 'ArmResourceOperation';
+      $.OperationListResult['x-ms-client-name'] = 'ArmOperationListResult';
   - from: resources.json
     where: $.paths['/providers/Microsoft.Resources/deployments/{deploymentName}/whatIf'].post.parameters[1].schema
     transform: $['$ref'] = '#/definitions/DeploymentWhatIf'
@@ -322,16 +326,20 @@ directive:
     where: $.definitions.DeploymentScriptPropertiesBase.properties.outputs
     transform: >
       $.additionalProperties = undefined
+  - from: types.json
+    where: $.definitions.Operation.properties.display
+    transform: >
+      $['x-ms-client-name'] = 'OperationDisplay'
 ```
 
-### Tag: package-resources-2022-04
+### Tag: package-resources-2022-12
 
-These settings apply only when `--tag=package-resources-2022-04` is specified on the command line.
+These settings apply only when `--tag=package-resources-2022-12` is specified on the command line.
 
-```yaml $(tag) == 'package-resources-2022-04'
+```yaml $(tag) == 'package-resources-2022-12'
 input-file:
-    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/91ac14531f0d05b3d6fcf4a817ea0defde59fe63/specification/resources/resource-manager/Microsoft.Resources/stable/2021-04-01/resources.json
-    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/91ac14531f0d05b3d6fcf4a817ea0defde59fe63/specification/resources/resource-manager/Microsoft.Solutions/stable/2019-07-01/managedapplications.json
-    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/91ac14531f0d05b3d6fcf4a817ea0defde59fe63/specification/resources/resource-manager/Microsoft.Resources/stable/2020-10-01/deploymentScripts.json
-    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/91ac14531f0d05b3d6fcf4a817ea0defde59fe63/specification/resources/resource-manager/Microsoft.Resources/stable/2021-05-01/templateSpecs.json
+    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/1be09531e4c6edeafde41d6562371566d39669e8//specification/resources/resource-manager/Microsoft.Solutions/stable/2019-07-01/managedapplications.json
+    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/1be09531e4c6edeafde41d6562371566d39669e8/specification/resources/resource-manager/Microsoft.Resources/stable/2020-10-01/deploymentScripts.json
+    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/1be09531e4c6edeafde41d6562371566d39669e8/specification/resources/resource-manager/Microsoft.Resources/stable/2021-05-01/templateSpecs.json
+    - https://raw.githubusercontent.com/Azure/azure-rest-api-specs/1be09531e4c6edeafde41d6562371566d39669e8/specification/resources/resource-manager/Microsoft.Resources/stable/2022-09-01/resources.json
 ```
